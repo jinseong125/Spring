@@ -1,0 +1,412 @@
+STS3 다운로드 페이지
+  https://github.com/spring-attic/toolsuite-distribution/wiki/Spring-Tool-Suite-3
+
+Spring Tool Suite 3.9.18
+full distribution on Eclipse 4.21
+  https://download.springsource.com/release/STS/3.9.18.RELEASE/dist/e4.21/spring-tool-suite-3.9.18.RELEASE-e4.21.0-win32-x86_64.zip  (Windows용)
+  https://download.springsource.com/release/STS/3.9.18.RELEASE/dist/e4.21/spring-tool-suite-3.9.18.RELEASE-e4.21.0-macosx-cocoa-x86_64.dmg  (MacOS용)
+  https://download.springsource.com/release/STS/3.9.18.RELEASE/dist/e4.21/spring-tool-suite-3.9.18.RELEASE-e4.21.0-linux-gtk-x86_64.tar.gz  (Linux용)
+
+다운로드 받은 zip 파일 압축 풀어 두기
+-----------------------------------------------------------------
+Lombok 다운로드 페이지
+  https://projectlombok.org/download
+Lombok 설치
+  lombok.jar 더블 클릭 (더블 클릭해서 실행이 안 되면 명령 프롬프트를 lombok.jar 파일 경로에서 열고 java -jar lombok.jar 명령 입력)
+- IDE를 못 찾는다는 대화상자가 나오면 무시하고 닫기
+- Specify Location 클릭
+- STS.exe 파일 선택 (D:\dev\tools\sts-bundle\sts-3.9.18.RELEASE\STS.exe)
+- Install / Update 클릭
+- Install Successful
+-----------------------------------------------------------------
+Servers 탭
+  기존 서버 제거 후 톰캣 서버 등록
+Windows - Web Browser
+  Chrome
+Windows - Preferences
+  글꼴 / 인코딩 / 들여쓰기 / Console 글자수 제한 해제(Run/Debug) / JSP Template
+
+JSP Template
+<%@ page language="java" contentType="text/html; charset=${encoding}" pageEncoding="${encoding}"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:set var="contextPath" value="$${pageContext.request.contextPath}" />
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="${encoding}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insert title here</title>
+</head>
+<body>
+${cursor}
+</body>
+</html>
+-----------------------------------------------------------------
+New - Maven Project
+체크 : Create a simple project (skip archetype selection)
+Artifact
+  Group Id : org.shark
+  Artifact Id : project
+  Version : 1.0.0
+  Packaging : war
+Finish
+-----------------------------------------------------------------
+Project - Properties
+  Project Facets
+    Dynamic Web Modules : 4.0
+    Java : 11
+-----------------------------------------------------------------
+.gitignore
+  Windows, Eclipse, Java, Maven 항목으로 생성
+-----------------------------------------------------------------
+src
+  main
+    webapp
+      resources
+      WEB-INF
+        spring
+          appServlet
+            servlet-context.xml
+          root-context.xml
+        views
+        web.xml
+-----------------------------------------------------------------
+root-context.xml
+  New - Spring Bean Configuration File
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+</beans>
+**************************************************
+servlet-context.xml
+  New - XML file 모두 입력
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:beans="http://www.springframework.org/schema/beans"
+      xmlns:context="http://www.springframework.org/schema/context"
+      xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+  <annotation-driven />
+  
+  <resources mapping="/resources/**" location="/resources/" />
+  
+  <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <beans:property name="prefix" value="/WEB-INF/views/" />
+    <beans:property name="suffix" value=".jsp" />
+  </beans:bean>
+  
+  <context:component-scan base-package="org.shark.project" />
+
+</beans:beans>
+**************************************************
+web.xml
+Create file using a DTD or XML Schema file
+Select XML Catalog entry
+  XML Catalog : web-app 검색
+  http://xmlns.jcp.org/xml/na/javaee/web-app_4_0.xsd 선택 후 Next
+  Namespace
+    첫 번째 항목 Edit : Prefix javaee 삭제
+    두 번째 항목 Delete
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0" 
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd ">
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/spring/root-context.xml</param-value>
+  </context-param>
+  
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <servlet>
+    <servlet-name>appServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>appServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+</web-app>
+-----------------------------------------------------------------
+pom.xml
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.shark</groupId>
+  <artifactId>project</artifactId>
+  <version>1.0.0</version>
+  <packaging>war</packaging>
+  
+  <!-- properties : ${} (프로퍼티 대치 문법)을 이용해 가져다 사용할 수 있습니다. -->
+  <properties>
+    <java.version>11</java.version>
+    <spring.version>5.3.39</spring.version>
+    <aspectj.version>1.9.22.1</aspectj.version>
+    <slf4j.version>1.7.36</slf4j.version>
+    <logback.version>1.2.13</logback.version>
+    <junit.version>4.13.2</junit.version>
+  </properties>
+  
+  <!-- dependencies : 디펜던시를 모아둡니다. -->
+  <!--
+    dependency's scope
+    
+    1. compile  : 디폴트. 컴파일/테스트/빌드/배포 시 모두 사용합니다. 
+    2. provided : 컴파일/빌드 시에는 사용하고, 배포 시에는 사용하지 않습니다. (코딩할 땐 사용하고, WAR 파일로 배포할 땐 톰캣이 제공하는 API를 사용합니다.)
+    3. test     : 테스트 시에만 사용합니다.
+    4. runtime  : 실행 시에만 사용합니다.
+  -->
+  <!-- 
+    Tomcat 9.0을 이용한 JSP 개발 시 필요한 디펜던시
+    
+    1. Servlet API 4.0.1
+    2. JSP API 2.3.3
+    3. JSTL 1.2
+  -->
+  <dependencies>
+  
+    <!-- Spring Web MVC : Spring MVC Project를 위한 필수 디펜던시 -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    
+    <!-- Spring Context -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    
+    <!-- AOP (Spring AOP with Aspectjweaver) -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+      <version>${aspectj.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+  
+    <!-- JSP (Servlet API, JSP API, JSTL) -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>javax.servlet.jsp-api</artifactId>
+      <version>2.3.3</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
+    
+    <!-- Lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.38</version>
+    </dependency>
+    
+    <!-- Logging (SLF4J with Logback) -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <!-- Testing (JUint 4, Spring Test) -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <!-- Database (Spring JDBC, MySQL Connector/J, MyBatis, MyBatis Spring, HikariCP) -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>8.0.33</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mybatis</groupId>
+      <artifactId>mybatis</artifactId>
+      <version>3.5.14</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mybatis</groupId>
+      <artifactId>mybatis-spring</artifactId>
+      <version>2.1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>5.1.0</version>
+    </dependency>
+    
+    <!-- File Upload -->
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.4</version>
+    </dependency>
+    
+  </dependencies>
+  
+  <build>
+    <plugins>
+      <!-- Compiler (*.java To *.class) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <!-- WAR (*.war) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.4.0</version>
+      </plugin>
+      <!-- Template (archetype) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-archetype-plugin</artifactId>
+        <version>3.1.2</version>
+      </plugin>
+    </plugins>
+  </build>
+  
+</project>
+
+디펜던시 변경 이후에는 project - Maven - Update Project
+-----------------------------------------------------------------
+src/main/java
+  org.shark.project
+    MainController.java
+src/main/resources
+src/test/java
+  org.shark.project
+src/test/resources
+-----------------------------------------------------------------
+src
+  main
+    webapp
+      resources
+      WEB-INF
+        spring
+          appServlet
+            servlet-context.xml
+          root-context.xml
+        views
+          main.jsp  (추가)
+        web.xml
+-----------------------------------------------------------------
+Run : Run on Server
+  http://localhost:8080/project
+-----------------------------------------------------------------
+Maven 설치 (아키타입(archetype) 생성을 위해서 로컬에 메이븐 설치가 필요함)
+1. maven.apache.org에서 최신 Maven 압축파일 다운로드 (Binary zip archive : apache-maven-3.9.11-bin.zip)
+2. 압축 해제
+3. 환경 변수 (MAVEN_HOME, Path)
+4. mvn -v
+-----------------------------------------------------------------
+* Template 등록
+1. MAVEN_HOME/conf/settings.xml 파일 복사해서 C:\Users\min\.m2\settings.xml 붙여 넣고 내용 비우기
+
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+</settings>
+
+2. 프로젝트 루트로 이동  (cd 명령 예시 -> cd D:/dev/Spring/project)
+mvn archetype:create-from-project  (archetype[템플릿] 만들기)
+cd target/generated-sources/archetype  (archetype project가 만들어 진 곳으로 이동)
+mvn install  (로컬 저장소에 archetype 저장 -> C:\Users\GD\.m2\repository\org\shark 디렉터리에 저장)
+
+* Template 이용 프로젝트 생성
+mvn archetype:generate -DarchetypeCatalog=local  (로컬 저장소에 저장된 archetype 이용해서 생성하겠다.)
+1: local -> org.shark:project-archetype (project-archetype)
+Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): : 1 (1 입력)
+Define value for property 'groupId': org.shark  (org.shark 입력)
+Define value for property 'artifactId': 01_IoC  (01_IoC 입력)
+Define value for property 'version' 1.0-SNAPSHOT: 1.0.0  (1.0.0 입력)
+Define value for property 'package' org.shark: org.shark.ioc  (org.shark.ioc 입력)
+Confirm properties configuration:
+groupId: org.shark
+artifactId: 01_IoC
+version: 1.0.0
+package: org.shark.ioc
+ Y: y  (y 입력)
+----------------------------------------------------------------
