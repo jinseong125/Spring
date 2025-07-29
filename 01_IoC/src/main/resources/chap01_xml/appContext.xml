@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <!-- 
+    Bean 등록
+    
+    1. <bean> 태그
+      1) <bean> 태그는 Spring Container에서 관리할 객체(인스턴스)를 정의하는 XML 태그입니다.
+      2) Java 객체를 Spring Container(IoC Container)에 등록하고, 의존성 주입(DI) 및 라이프사이클 관리를 가능하게 합니다.
+      3) 기본 형식
+        <bean id="beanId" class="org.example.project.MyClass">
+          프로퍼티 or 생성자 주입 설정
+        </bean>
+      4) 값을 저장하는 방법
+        (1) <property> 태그        : Setter를 이용하는 태그
+        (2) <constructor-arg> 태그 : Constructor를 이용하는 태그
+      5) 라이프 사이클 관리
+        (1) scope : 빈의 범위를 설정합니다. (디폴트는 singleton입니다. singleton, prototype, request, session)
+        (2) lazy-init      : 지연 초기화를 설정합니다. (디폴트는 false입니다. true/false)
+        (3) init-method    : 빈 초기화 이후 실행할 메소드입니다.
+        (4) destory-method : 빈 소멸 이전 실행할 메소드입니다.
+   -->
+
+  <!-- Bean 등록하기 (Spring Container에 저장됩니다.) -->
+  <bean id="add" class="org.shark.ioc.ex01_xml.Adder" />
+  <bean id="sub" class="org.shark.ioc.ex01_xml.Subtractor" />
+  <bean id="mul" class="org.shark.ioc.ex01_xml.Multiplier" />
+  <bean id="div" class="org.shark.ioc.ex01_xml.Divider" />
+  
+  <!-- Setter 이용해서 Bean 등록하기 -->
+  <bean id="calc1" class="org.shark.ioc.ex01_xml.Calculator">
+    <property name="brand" value="샤프" />
+    <property name="price" value="10000" />
+    <property name="adder" ref="add" />
+    <property name="subtractor" ref="sub" />
+    <property name="multiplier" ref="mul" />
+    <property name="divider" ref="div" />
+  </bean>
+  
+  <!-- Constructor 이용해서 Bean 등록하기 (매개변수 순서대로 값을 전달해야 합니다.) -->
+  <bean id="calc2" class="org.shark.ioc.ex01_xml.Calculator">
+    <constructor-arg value="필립스" />
+    <constructor-arg value="20000" />
+    <constructor-arg ref="add" />
+    <constructor-arg ref="sub" />
+    <constructor-arg ref="mul" />
+    <constructor-arg ref="div" />
+  </bean>
+
+</beans>
