@@ -5,14 +5,15 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Insert title here</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insert title here</title>
 </head>
 <body>
+
   <h1>Hello World</h1>
   
-  <img alt="로딩중..." src="${contextPath}/assets/image/test.png">
+  <img alt="로딩중..." src="${contextPath}/resources/image/loading.gif">
   
 </body>
 </html>

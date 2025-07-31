@@ -10,6 +10,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <h1>/a/list</h1>
+  <h1>/c/list</h1>
+  ${boards}
+  <br>
+  ${common}
+  <script type="text/javascript">
+    const msg = "${msg}";
+    if (msg !== "")
+      alert(msg);
+  </script>
 </body>
 </html>

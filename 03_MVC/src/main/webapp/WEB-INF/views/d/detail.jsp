@@ -10,6 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <h1>/a/list</h1>
+  <h1>/d/detail</h1>
+  ${board}
 </body>
 </html>

@@ -4,7 +4,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.shark</groupId>
-  <artifactId>03_MVC</artifactId>
+  <artifactId>project</artifactId>
   <version>1.0.0</version>
   <packaging>war</packaging>
   
@@ -148,6 +148,18 @@
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <version>1.4</version>
+    </dependency>
+    
+    <!-- Jackson Library (Jackson Databind + Jackson Dataformat XML) -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.12.7.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-xml</artifactId>
+      <version>2.12.7</version>
     </dependency>
     
   </dependencies>
