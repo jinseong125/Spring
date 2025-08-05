@@ -3,5 +3,52 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+ <!-- 1. HikariConfig -->
+  <bean class="com.zaxxer.hikari.HikariConfig" id="hikariConfig">
+    <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/db_file?characterEncoding=UTF-8&amp;serverTimezone=UTC" />
+    <property name="username" value="goodee" />
+    <property name="password" value="goodee" />
+  </bean>
+  
+  <!-- 2. HikariDataSource -->
+  <bean class="com.zaxxer.hikari.HikariDataSource" id="hikariDataSource">
+    <constructor-arg ref="hikariConfig" />
+  </bean>
+  
+  <!-- 3. SqlSessionFactoryBean -->
+  <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
+    <property name="dataSource" ref="hikariDataSource" />
+    <property name="configLocation" value="classpath:mybatis/config/mybatis-config.xml" />
+    <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml" />
+  </bean>
+  
+  <!-- 4. SqlSessionTemplate -->
+  <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+    <constructor-arg ref="sqlSessionFactoryBean" />
+  </bean>
+  
+  <!-- 파일 첨부 시 CommonMultipartResolver 타입의 multipartResolver 이름을 가진 진 등록이 필요합니다. -->
+  <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+    <property name="defaultEncoding" value="UTF-8" />
+    <property name="maxUploadSize" value="104857600" />
+    <property name="maxUploadSizePerFile" value="10485760" />
+  </bean>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 </beans>

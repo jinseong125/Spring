@@ -10,11 +10,12 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <a href="${contextPath}/user/list">회원 목록</a>
-  <script type="text/javascript">
-  const msg = "${msg}";
-  if (msg !== "")
-    alert(msg);
-  </script>
+ <h1>회원 정보 확인</h1>
+ 
+ <div>이메일 : ${user.email}</div>
+ <div>프로필 이미지</div>
+ <div>
+  <img alt="프로필" src="${contextPath}${user.filePath}/${user.filesystemName}">
+ </div>
 </body>
 </html>
