@@ -16,7 +16,6 @@ import lombok.ToString;
 @Builder
 @ToString
 public class BoardDTO {
-
   private Integer bid;
   private UserDTO user;
   private String title;

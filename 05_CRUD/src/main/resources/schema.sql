@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS tbl_user (
   uid      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   email    VARCHAR(100) NOT NULL,
   password VARCHAR(100) NOT NULL,
+  salt     BINARY(16),
   nickname VARCHAR(100) NOT NULL,
   UNIQUE KEY(email),
   UNIQUE KEY(nickname)
