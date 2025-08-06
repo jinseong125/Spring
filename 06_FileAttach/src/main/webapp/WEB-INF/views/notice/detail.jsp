@@ -10,13 +10,20 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <a href="${contextPath}/user/list">회원 목록</a>
-  <br>
-  <a href="${contextPath}/notice/list">공지사항</a>
-  <script type="text/javascript">
-  const msg = "${msg}";
-  if (msg !== "")
-    alert(msg);
-  </script>
+
+ <h1>${notice.title}</h1>
+ 
+ <h4>첨부 파일</h4>
+ <c:forEach items="${attaches}" var="attach">
+   <div>
+    <a class="download-links" href="${contextPath}/notice/download?aid=${attach.aid}">${attach.originalFilename}</a>
+   </div>
+ </c:forEach>
+ 
+ <pre>${notice.content}</pre>
+ 
+ <button type="button" onClick="onDelete()">삭제</button>
+ 
+ 
 </body>
 </html>

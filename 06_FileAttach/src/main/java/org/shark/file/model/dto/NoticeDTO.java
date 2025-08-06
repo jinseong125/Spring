@@ -17,5 +17,5 @@ public class NoticeDTO {
   private Integer nid;
   private String title;
   private String content;
-
+  private Integer attachCount;
 }

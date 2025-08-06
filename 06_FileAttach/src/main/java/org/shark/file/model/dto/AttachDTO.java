@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 public class AttachDTO {
   private Integer aid;
-  private String nid;
+  private Integer nid;
   private String filePath;
   private String originalFilename;
   private String filesystemName;
