@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mapper.bbsMapper">
+ 
+  <!-- 게시글 등록 -->
+  <insert id="insertParentBbs" parameterType="BbsDTO"
+    useGeneratedKeys="true"
+    keyProperty="bbsId"
+  >
+    INSERT INTO tbl_bbs (content, depth, group_order)
+    VALUES (#{content}, 0, 0)
+  </insert>
+  
+  <!-- 게시글 등록 후 group_id만 별도로 업데이트 -->
+  <update id="updateGroupId" parameterType="BbsDTO">
+    UPDATE tbl_bbs
+       SET group_id = #{bbsId}
+     WHERE bbs_id = #{bbsId}
+  </update>
+  
+  <!-- 답글 등록 이전에 기존 답글들의 group_order를 업데이트 -->
+  <update id="updateGroupOrder" parameterType="BbsDTO">
+    UPDATE tbl_bbs
+       SET group_order = group_order + 1
+     WHERE group_id = #{groupId} AND group_order > #{groupOrder}
+  </update>
+  
+  <!-- 답글 등록 -->
+  <insert id="insertChildBbs" parameterType="BbsDTO">
+    INSERT INTO tbl_bbs (content, depth, group_id, group_order)
+    VALUES (#{content}, #{depth}, #{groupId}, #{groupOrder})
+  </insert>
+  
+  <!-- 게시글/답글 삭제 -->
+  <update id="deleteBbsById" parameterType="java.lang.Integer">
+    UPDATE tbl_bbs
+       SET state = 0, content = '삭제된 게시글'
+     WHERE bbs_id = #{bbsId}
+  </update>
+  
+  <!-- 전체 게시글의 개수 -->
+  <select id="getBbsCount" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+      FROM tbl_bbs
+  </select>
+  
+  <!-- 게시글 목록 -->
+  <select id="getBbsList" parameterType="PageDTO" resultType="BbsDTO">
+    SELECT bbs_id, content, state, depth, group_id, group_order
+      FROM tbl_bbs
+     ORDER BY group_id DESC, group_order ASC
+     LIMIT #{offset}, #{size}
+  </select>
+ 
+</mapper>
